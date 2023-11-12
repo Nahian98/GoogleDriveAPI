@@ -5,14 +5,300 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Hello World!"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".MainActivity"
+    android:background="@color/background_home_black">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvImport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Import"
+        android:textColor="@color/tab_background_selected"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcGDrive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:strokeColor="@color/stroke_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvImport"
+        android:backgroundTint="@color/background_home_black">
+        
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llGDrive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+            <ImageView
+                android:id="@+id/ivGDrive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/baseline_drive_file_move_24"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llGDriveText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvGDrive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Google Drive"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSignInGDrive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tap_to_sign_in"
+                    android:textColor="@color/white"
+                    android:paddingTop="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:strokeColor="@color/stroke_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcGDrive"
+        android:backgroundTint="@color/background_home_black">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llFiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+            <ImageView
+                android:id="@+id/ivFiles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/baseline_drive_file_move_24"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llFileText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Files"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvImportTrackFiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Import tracks from files"
+                    android:textColor="@color/white"
+                    android:paddingTop="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcDropBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:strokeColor="@color/stroke_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcFiles"
+        android:backgroundTint="@color/background_home_black">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llDropBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+            <ImageView
+                android:id="@+id/ivDropBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/baseline_drive_file_move_24"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llDropBoxText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDropBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dropbox"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSignInDropBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tap_to_sign_in"
+                    android:textColor="@color/white"
+                    android:paddingTop="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcOneDrive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:strokeColor="@color/stroke_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcDropBox"
+        android:backgroundTint="@color/background_home_black">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llOneDrive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+            <ImageView
+                android:id="@+id/ivOneDrive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/baseline_drive_file_move_24"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llOneDriveText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOneDrive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="OneDrive"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSignInOneDrive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tap_to_sign_in"
+                    android:textColor="@color/white"
+                    android:paddingTop="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:strokeColor="@color/stroke_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcOneDrive"
+        android:backgroundTint="@color/background_home_black">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+            <ImageView
+                android:id="@+id/ivBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/baseline_drive_file_move_24"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llBoxText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Box"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSignInBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tap_to_sign_in"
+                    android:textColor="@color/white"
+                    android:paddingTop="8dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
 
   </androidx.constraintlayout.widget.ConstraintLayout>

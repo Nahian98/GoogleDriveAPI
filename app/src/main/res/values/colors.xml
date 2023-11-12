@@ -2,4 +2,72 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="tab_background_selected">#49C01D</color>
+    <color name="tab_background_unselected">#444242</color>
+    <color name="background_home_black">#4C4C4C</color>
+    <color name="stroke_color">#707070</color>
+
+
+    <color name="colorPrimary">#A51E35</color>
+    <color name="colorPrimaryDark">#7A0F37</color>
+    <color name="colorAccent">#A51E35</color>
+
+    <color name="semi_transparent_white">#80FFFFFF</color>
+
+    <!--    Grey -->
+    <color name="grey_600">#9CA3AF</color>
+    <color name="grey_500">#6B7280</color>
+    <color name="grey_400">#D1D5DB</color>
+    <color name="grey_300">#E8EFFB</color>
+    <color name="grey_200">#EEF2F4</color>
+    <color name="grey_100">#F9FAFB</color>
+    <color name="grey_50">#F2F2F2</color>
+    <color name="background_home">#F9F9F9</color>
+    <color name="transparent_grey">#B36B7280</color>
+    <color name="text_secondary_color">#656565</color>
+
+
+
+    <!--    Text Colors -->
+    <color name="text_color_600">#111827</color>
+    <color name="text_color_500">#4B5563</color>
+    <color name="text_color_400">#6B7280</color>
+    <color name="text_color_300">#9CA3AF</color>
+    <color name="text_color_200">#E5E7EB</color>
+    <color name="text_color_100">#F3F4F6</color>
+    <color name="text_grey">#B0B2B5</color>
+
+    <!--    Green -->
+    <color name="green_800">#086347</color>
+    <color name="green_700">#0E7B4F</color>
+    <color name="green_500">#1CAB55</color>
+
+
+    <!--    Red (Secondary)-->
+    <color name="red_600">#851330</color>
+    <color name="red_550">#A51E35</color>
+    <color name="red_500">#930F15</color>
+    <color name="red_400">#E63C3C</color>
+    <color name="red_350">#F06142</color>
+    <color name="red_300">#FCC5B1</color>
+    <color name="red_200">#FDE5D8</color>
+    <color name="red_150">#FFE5DF</color>
+    <color name="red_100">#FFF5ED</color>
+    <color name="red_50">#FBF6F6</color>
+
+
+    <!--    Red (Support) -->
+    <color name="red_support_600">#7A0F37</color>
+    <color name="red_support_500">#97193C</color>
+    <color name="red_support_400">#D33242</color> <!--Used for danger-->
+    <color name="red_support_350">#F08A8A</color>
+    <color name="red_support_300">#FABBAE</color>
+    <color name="red_support_250">#FFD1D1</color>
+    <color name="red_support_200">#FCE0D6</color>
+    <color name="red_support_150">#FFEBEA</color>
+    <color name="red_support_100">#FFF8F5</color>
+
+    <color name="background_color">#fbf9ff</color>
+    <color name="bottom_nav_select">#D83A56</color>
+    <color name="bottom_nav_unselect">#6F6F70</color>
 </resources>

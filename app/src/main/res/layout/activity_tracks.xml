@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TracksActivity"
+    android:background="@color/background_home_black">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="1"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingBottom="28dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Select"
+            android:textColor="@color/white"
+            android:layout_weight="0.4"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Tracks"
+            android:textColor="@color/tab_background_selected"
+            android:layout_weight="0.5"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llTabSort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llTop">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcTabBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:layout_marginEnd="4dp">
+
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_home"
+                app:tabBackground="@drawable/tab_color_selector"
+                app:tabTextColor="@color/white"
+                app:tabIndicatorColor="@color/tab_background_selected"
+                app:tabIndicatorAnimationMode="fade">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Name"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Title"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Date"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Album"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Artist"/>
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/background_home"
+            android:layout_weight="0.1">
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_home_black"
+                android:text="Sort"
+                android:textColor="@color/white"/>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llTabSort"
+        android:layout_marginTop="20dp">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/svSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/stroke_color"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcShuffleAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/stroke_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcSearchView"
+        android:layout_marginTop="20dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/stroke_color"
+            android:text="Shuffle All"
+            android:textAllCaps="false"
+            android:textColor="@color/tab_background_selected"
+            android:textSize="20dp"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMusics"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcShuffleAll"
+        android:layout_marginTop="18dp"
+        tools:listitem="@layout/item_songs"
+        tools:itemCount="10"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTotalTracks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:layout_marginTop="20dp"
+        tools:text="Total Tracks: 4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvMusics"/>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
