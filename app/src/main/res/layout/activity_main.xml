@@ -68,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/tap_to_sign_in"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/_8sdp"
                     android:paddingTop="8dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -124,6 +125,7 @@
                     android:layout_height="wrap_content"
                     android:text="Import tracks from files"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/_8sdp"
                     android:paddingTop="8dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -180,6 +182,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/tap_to_sign_in"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/_8sdp"
                     android:paddingTop="8dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -236,6 +239,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/tap_to_sign_in"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/_8sdp"
                     android:paddingTop="8dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -291,6 +295,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/tap_to_sign_in"
+                    android:textSize="@dimen/_8sdp"
                     android:textColor="@color/white"
                     android:paddingTop="8dp"/>
 

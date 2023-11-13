@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GoogleDriveAPI"
+        android:theme="@style/Base.Theme.AndroidGuideLine"
         tools:targetApi="31">
         <activity
             android:name=".TracksActivity"

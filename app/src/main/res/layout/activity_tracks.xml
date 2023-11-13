@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TracksActivity"
+    android:paddingStart="@dimen/_8sdp"
+    android:paddingEnd="@dimen/_8sdp"
     android:background="@color/background_home_black">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -16,9 +18,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:weightSum="1"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingBottom="28dp">
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingBottom="@dimen/_16sdp">
 
         <TextView
             android:layout_width="0dp"
@@ -26,7 +28,7 @@
             android:text="Select"
             android:textColor="@color/white"
             android:layout_weight="0.4"
-            android:textSize="20dp"/>
+            android:textSize="@dimen/_15sdp"/>
 
         <TextView
             android:layout_width="0dp"
@@ -35,7 +37,7 @@
             android:textColor="@color/tab_background_selected"
             android:layout_weight="0.5"
             android:textStyle="bold"
-            android:textSize="20dp"/>
+            android:textSize="@dimen/_18sdp"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -52,8 +54,8 @@
             android:id="@+id/mcTabBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:layout_marginEnd="4dp">
+            android:layout_weight="0.94"
+            android:layout_marginEnd="@dimen/_4sdp">
 
             <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
@@ -61,6 +63,7 @@
                 android:background="@color/background_home"
                 app:tabBackground="@drawable/tab_color_selector"
                 app:tabTextColor="@color/white"
+
                 app:tabIndicatorColor="@color/tab_background_selected"
                 app:tabIndicatorAnimationMode="fade">
 
@@ -115,7 +118,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llTabSort"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="@dimen/_20sdp">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/svSearch"
@@ -133,7 +136,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mcSearchView"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="@dimen/_20sdp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="match_parent"
@@ -142,7 +145,7 @@
             android:text="Shuffle All"
             android:textAllCaps="false"
             android:textColor="@color/tab_background_selected"
-            android:textSize="20dp"/>
+            android:textSize="@dimen/_20sdp"/>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -169,10 +172,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvMusics"/>
-
-
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
