@@ -17,7 +17,7 @@ import com.google.api.services.drive.model.FileList
 import java.io.IOException
 import java.util.Collections
 import kotlin.concurrent.thread
-class GoogleDriveServiceHelper(val activity: AppCompatActivity) {
+class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
 
     private val TAG = "_GoogleDriveHelper"
     private val APP_NAME = "GDriveKanon"
