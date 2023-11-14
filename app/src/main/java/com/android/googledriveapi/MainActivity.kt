@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnDownload.setOnClickListener {
             val downloader = AndroidDownloader(this@MainActivity)
+            // https://drive.google.com/uc?id=<FILE_ID>&export=download
             val link = "https://drive.google.com/uc?id=1F-vfvhw6B9UNNjqlnoK-2PBhJG2wIU_Z&export=download "
             thread {
                 downloader.donwloadFile(link)
