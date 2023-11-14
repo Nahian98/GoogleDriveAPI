@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/baseline_drive_file_move_24"/>
+                android:src="@drawable/googledrive_icon_import_omp_android"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llGDriveText"
@@ -102,7 +102,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/baseline_drive_file_move_24"/>
+                android:src="@drawable/files_icon_import_omp_android"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llFileText"
@@ -159,7 +159,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/baseline_drive_file_move_24"/>
+                android:src="@drawable/dropbox_icon_import_omp_android"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llDropBoxText"
@@ -216,7 +216,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/baseline_drive_file_move_24"/>
+                android:src="@drawable/onedrive_icon_import_omp_android"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llOneDriveText"
@@ -273,7 +273,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/baseline_drive_file_move_24"/>
+                android:src="@drawable/box_icon_import_omp_android"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llBoxText"
@@ -305,5 +305,14 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcBox"
+        android:text="Download"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
