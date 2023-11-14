@@ -115,15 +115,6 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "AccessToken: ${credential.token}")
                 }
 
-//                val accessToken = GoogleAuthorizationCodeTokenRequest(
-//                    AndroidHttp.newCompatibleTransport(),
-//                    GsonFactory(),
-//                    "https://www.googleapis.com/oauth2/v4/token",
-//                    "814058854405-3lrsv3scap70p7qbe0mdj3pfkutk33ga.apps.googleusercontent.com",
-//                    googleAccount.serverAuthCode,
-//                    ""
-//                ).execute()
-
                 val googleDriveService = Drive.Builder(
                     AndroidHttp.newCompatibleTransport(),
                     GsonFactory(),
