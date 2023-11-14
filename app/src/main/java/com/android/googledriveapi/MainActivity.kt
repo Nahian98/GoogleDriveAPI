@@ -1,127 +1,162 @@
 package com.android.googledriveapi
 
-import androidx.appcompat.app.AppCompatActivity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.auth.UserRecoverableAuthException
+import androidx.appcompat.app.AppCompatActivity
+import com.android.googledriveapi.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.JsonFactory
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.IOException
+import java.util.Collections
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private val TAG = "_MainActivity"
+    private val REQUEST_CODE_SIGN_IN = 1
+    private val APP_NAME = "GDriveKanon"
+    private val RC_GET_TOKEN = 9002
 
-    private lateinit var credentials: GoogleAccountCredential
-    private lateinit var driveService: Drive
-    private lateinit var gso: GoogleSignInOptions
-    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
+    private var fileList = mutableListOf<File>()
+
+    private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            handleSignInResult(result.data)
+        } else {
+            Log.d(TAG, "Unable to Sign In")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        requestSignIn()
+
+        initListener()
+
+    }
+
+    private fun initListener() {
+        binding.mcGDrive.setOnClickListener {
+            Log.d(TAG, "$fileList")
+        }
+    }
+
+    private fun requestSignIn() {
+        Log.d(TAG, "Requesting sign-in")
         // Configure sign-in to request the user's ID, email address, and basic profile.
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope(DriveScopes.DRIVE_METADATA_READONLY))
+            .requestIdToken("814058854405-3lrsv3scap70p7qbe0mdj3pfkutk33ga.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
         // Build a GoogleSignInClient with the options specified by gso.
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        signInLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val data: Intent? = result.data
-                    data?.let {
-                        try {
-                            // Attempt to handle the result and obtain credentials
-                            handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(it))
-                        } catch (e: UserRecoverableAuthIOException) {
-                            // Handle the case where additional user consent is needed
-                            val consentIntent = e.intent
-                            signInLauncher.launch(consentIntent)
-                        }
-                    }
-                }
-            }
+        startActivityForResult(googleSignInClient.signInIntent, RC_GET_TOKEN)
 
-        // Attempt to sign in the user.
-        val signInIntent = googleSignInClient.signInIntent
-        signInLauncher.launch(signInIntent)
+//        signInLauncher.launch(googleSignInClient.signInIntent)
     }
 
-    private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
+    private fun handSignInResult2(completedTask: Task<GoogleSignInAccount>){
         try {
-            val account = task.getResult(ApiException::class.java)!!
-            credentials = GoogleAccountCredential.usingOAuth2(
-                applicationContext, setOf("https://www.googleapis.com/auth/drive")
-            )
-            credentials.selectedAccount = account.account
-            driveService = Drive.Builder(
-                AndroidHttp.newCompatibleTransport(),
-                GsonFactory(),
-                credentials
-            )
-                .setApplicationName("GDriveKanon")
-                .build()
-            listFiles()
-        } catch (e: ApiException) {
-            if (e.statusCode == GoogleSignInStatusCodes.SIGN_IN_REQUIRED) {
-                // The user needs to grant additional consent. Launch the intent.
-                val signInIntent = GoogleSignIn.getClient(this, gso).signInIntent
-                signInLauncher.launch(signInIntent)
-            } else {
-                // Handle other sign-in failures
-                Log.e("SignInError", "Error signing in: ${e.message}")
-            }
-        } catch (e: UserRecoverableAuthException) {
-            // Launch the intent for user consent
-            signInLauncher.launch(e.intent)
-        }
-    }
+            val account = completedTask.getResult(ApiException::class.java)
 
+            val idToken = account.idToken
 
-    private fun listFiles() {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val result: FileList = driveService.files().list().execute()
-                val files = result.files
-                for (file in files) {
-                    Log.d("_Files", "$file")
-                }
-            } catch (e: IOException) {
-                // Handle API request error
-                Log.e("_Files", "Error listing files", e)
-            }
+            Log.d(TAG, "$idToken")
+
+        } catch (e: ApiException){
+            e.printStackTrace()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            // User granted consent, proceed with Drive API operations
-            listFiles()
+
+        if (resultCode == RC_GET_TOKEN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handSignInResult2(task)
+            Log.d(TAG, "Signed In")
         } else {
-            // User denied consent, handle accordingly
-            Log.e("SignInError", "User denied consent.")
+            Log.d(TAG, "Unable to Sign In")
         }
     }
+
+
+    private fun handleSignInResult(result: Intent?) {
+//        val results = result?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
+        GoogleSignIn.getSignedInAccountFromIntent(result)
+            .addOnSuccessListener { googleAccount ->
+                Log.d(TAG, "Signed In as ${googleAccount.email}")
+
+                var credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(
+                    this@MainActivity, Collections.singleton(DriveScopes.DRIVE_METADATA_READONLY)
+                )
+
+                credential.selectedAccount = googleAccount.account
+                googleAccount.serverAuthCode
+                Log.d(TAG, "${googleAccount.serverAuthCode}")
+
+                Log.d(TAG, "${credential.token}")
+
+//                val accessToken = GoogleAuthorizationCodeTokenRequest(
+//                    AndroidHttp.newCompatibleTransport(),
+//                    GsonFactory(),
+//                    "https://www.googleapis.com/oauth2/v4/token",
+//                    "814058854405-3lrsv3scap70p7qbe0mdj3pfkutk33ga.apps.googleusercontent.com",
+//                    googleAccount.serverAuthCode,
+//                    ""
+//                ).execute()
+
+                val googleDriveService = Drive.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    GsonFactory(),
+                    credential
+                ).setApplicationName(APP_NAME).build()
+
+                thread {
+                    listFiles(googleDriveService)
+                }
+
+            }
+
+            .addOnFailureListener {
+                Log.e(TAG, "Unable to sign in.", it)
+            }
+    }
+
+
+    private fun listFiles(googleDriveService: Drive) {
+        try {
+            val result: FileList = googleDriveService.files().list().execute()
+            val files: MutableList<File> = result.files
+            for (file in files) {
+                Log.d("_Files", "$file")
+                fileList.add(file)
+            }
+        } catch (e: IOException) {
+            // Handle API request error
+            Log.e("_Files", "Error listing files", e)
+        }
+    }
+
 
 }

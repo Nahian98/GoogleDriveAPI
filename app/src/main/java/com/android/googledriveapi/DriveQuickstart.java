@@ -1,6 +1,7 @@
 package com.android.googledriveapi;
 
-import android.os.AsyncTask;
+import android.util.Log;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -19,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +29,7 @@ public class DriveQuickstart {
     /**
      * Application name.
      */
-    private static final String APPLICATION_NAME = "GoogleDriveAPI";
+    private static final String APPLICATION_NAME = "GDriveKanon";
     /**
      * Global instance of the JSON factory.
      */
@@ -54,13 +54,14 @@ public class DriveQuickstart {
      * @return An authorized Credential object.
      * @throws IOException If the credentials.json file cannot be found.
      */
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
-            throws IOException {
+    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
         try {
             // Load client secrets.
             InputStream in = DriveQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
             if (in == null) {
                 throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+            } else {
+                Log.d("_FileFound", "File Found");
             }
             GoogleClientSecrets clientSecrets =
                     GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
@@ -104,28 +105,4 @@ public class DriveQuickstart {
             }
         }
     }
-
-    private class DownloadFilesTask extends AsyncTask<URL, Integer, Long> {
-        protected Long doInBackground(URL... urls) {
-            int count = urls.length;
-            long totalSize = 0;
-            for (int i = 0; i < count; i++) {
-                totalSize += 1;
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
-            return totalSize;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-//            setProgressPercent(progress[0]);
-        }
-
-        protected void onPostExecute(Long result) {
-//            showDialog("Downloaded " + result + " bytes");
-        }
-
-    }
-
 }
