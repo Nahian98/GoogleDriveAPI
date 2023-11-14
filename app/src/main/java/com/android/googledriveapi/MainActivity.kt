@@ -53,8 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         googleDriveServiceHelper = GoogleDriveServiceHelper(this@MainActivity)
         initListener()
-
-        binding.ivGDrive.setImageDrawable(R.drawable.)
     }
 
     private fun onPermissionDenied() {
@@ -68,15 +66,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnDownload.setOnClickListener {
             val downloader = AndroidDownloader(this@MainActivity)
-            val link = "https://drive.google.com/file/d/1F-vfvhw6B9UNNjqlnoK-2PBhJG2wIU_Z/view?usp=drive_link"
+            val link = "https://drive.google.com/uc?id=1F-vfvhw6B9UNNjqlnoK-2PBhJG2wIU_Z&export=download "
             thread {
                 downloader.donwloadFile(link)
             }
         }
     }
-
-//    https://drive.google.com/file/d/1ExoyEY1bscOQLuSy5dEqbmrIuKSelkvv/view?usp=drive_link
-//    https://drive.google.com/file/d/1vsZmseeNBtzCsyW7PciWMT5ZraplNuOt/view?usp=drive_link
-//    https://drive.google.com/file/d/1F-vfvhw6B9UNNjqlnoK-2PBhJG2wIU_Z/view?usp=drive_link
-//    https://drive.google.com/file/d/14XomAYktsmffUkccBYwRDTHLLVqJGVyU/view?usp=drive_link
 }
