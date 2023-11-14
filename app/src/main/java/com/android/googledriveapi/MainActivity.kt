@@ -63,16 +63,15 @@ class MainActivity : AppCompatActivity() {
         // Configure sign-in to request the user's ID, email address, and basic profile.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestScopes(Scope(DriveScopes.DRIVE_METADATA_READONLY))
-            .requestIdToken("814058854405-3lrsv3scap70p7qbe0mdj3pfkutk33ga.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
         // Build a GoogleSignInClient with the options specified by gso.
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        startActivityForResult(googleSignInClient.signInIntent, RC_GET_TOKEN)
+//        startActivityForResult(googleSignInClient.signInIntent, RC_GET_TOKEN)
 
-//        signInLauncher.launch(googleSignInClient.signInIntent)
+        signInLauncher.launch(googleSignInClient.signInIntent)
     }
 
     private fun handSignInResult2(completedTask: Task<GoogleSignInAccount>){
@@ -90,7 +89,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == RC_GET_TOKEN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handSignInResult2(task)
@@ -112,10 +110,10 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 credential.selectedAccount = googleAccount.account
-                googleAccount.serverAuthCode
-                Log.d(TAG, "${googleAccount.serverAuthCode}")
-
-                Log.d(TAG, "${credential.token}")
+                thread {
+                    Log.d(TAG, "AuthCode: ${googleAccount.serverAuthCode}")
+                    Log.d(TAG, "AccessToken: ${credential.token}")
+                }
 
 //                val accessToken = GoogleAuthorizationCodeTokenRequest(
 //                    AndroidHttp.newCompatibleTransport(),
