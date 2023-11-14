@@ -1,4 +1,4 @@
-package com.android.googledriveapi
+package com.android.googledriveapi.demos
 
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
@@ -60,7 +60,9 @@ object DriveQuickKotlin {
         return withContext(Dispatchers.IO) {
             try {
                 // Load client secrets.
-                val input: InputStream = DriveQuickstart::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+                val input: InputStream = DriveQuickstart::class.java.getResourceAsStream(
+                    CREDENTIALS_FILE_PATH
+                )
                     ?: throw FileNotFoundException("Resource not found: $CREDENTIALS_FILE_PATH")
                 val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, InputStreamReader(input))
 

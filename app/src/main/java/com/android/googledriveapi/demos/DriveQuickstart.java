@@ -1,4 +1,4 @@
-package com.android.googledriveapi;
+package com.android.googledriveapi.demos;
 
 import android.util.Log;
 
