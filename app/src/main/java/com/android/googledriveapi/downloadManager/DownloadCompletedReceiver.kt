@@ -1,4 +1,4 @@
-package com.android.googledriveapi
+package com.android.googledriveapi.downloadManager
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
