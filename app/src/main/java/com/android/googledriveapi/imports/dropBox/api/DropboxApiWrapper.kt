@@ -90,9 +90,13 @@ class DropboxApiWrapper(
                             files.addAll(continueResponse.result.entries)
                             emit(GetFilesResponse.Success(files))
                         }
+
+                        else -> {}
                     }
                 }
             }
+
+            else -> {}
         }
     }
 

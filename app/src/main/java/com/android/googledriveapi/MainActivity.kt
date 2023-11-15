@@ -5,17 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.googledriveapi.databinding.ActivityMainBinding
 import kotlin.concurrent.thread
 import android.Manifest
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.lifecycleScope
 import com.android.googledriveapi.downloadManager.AndroidDownloader
 import com.android.googledriveapi.imports.dropBox.DropBoxServiceHelper
 import com.android.googledriveapi.imports.googleDrive.GoogleDriveServiceHelper
-import com.android.googledriveapi.imports.dropBox.api.GetCurrentAccountResult
 import com.dropbox.core.oauth.DbxCredential
-import com.dropbox.core.v2.files.ListFolderResult
-import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -89,9 +85,9 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 Toast.makeText(this@MainActivity, "Already signed in", Toast.LENGTH_SHORT).show()
-                fetchAccountInfo()
+                dropBoxServiceHelper.fetchAccountInfo()
                 thread {
-                    listFiles()
+                    dropBoxServiceHelper.listFiles()
                 }
             }
         }
@@ -106,33 +102,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun listFiles(){
-        val files: ListFolderResult? = dropBoxServiceHelper.dropboxApiWrapper?.dropboxClient?.files()?.listFolder("")
-        Log.d("_DFiles", "$files")
-    }
-
-    private fun fetchAccountInfo() {
-        lifecycleScope.launch {
-            when (val accountResult = dropBoxServiceHelper.dropboxApiWrapper?.getCurrentAccount()) {
-                is GetCurrentAccountResult.Error -> {
-                    Log.e(
-                        javaClass.name,
-                        "Failed to get account details.",
-                        accountResult.e
-                    )
-                    Toast.makeText(
-                        applicationContext,
-                        "Error getting account info!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                is GetCurrentAccountResult.Success -> {
-                    val account = accountResult.account
-                    Log.d("__DropboxAccount", "Email: ${account.email}  Displayname: ${account.name.displayName} AccountType: ${account.accountType.name}")
-                }
-
-                else -> {}
-            }
-        }
-    }
 }
