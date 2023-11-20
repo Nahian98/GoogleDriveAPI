@@ -1,9 +1,13 @@
 package com.android.googledriveapi.imports.googleDrive
 import android.app.Activity
 import android.content.Intent
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.googledriveapi.model.Songs
+import com.android.googledriveapi.view.adapter.SongsAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
@@ -14,6 +18,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import kotlinx.coroutines.delay
 import java.io.IOException
 import java.util.Collections
 import kotlin.concurrent.thread
@@ -21,7 +26,7 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
 
     private val TAG = "_GoogleDriveHelper"
     private val APP_NAME = "GDriveKanon"
-    private var fileList = mutableListOf<File>()
+    var fileList = mutableListOf<Songs>()
 
     private val signInLauncher =
         activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -82,8 +87,13 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
             val files: MutableList<File> = result.files
             for (file in files) {
                 Log.d("_Files", "$file")
-                fileList.add(file)
+                fileList.add(
+                    Songs(
+                    name = file.name
+                    )
+                )
             }
+
         } catch (e: IOException) {
             // Handle API request error
             Log.e("_Files", "Error listing files", e)

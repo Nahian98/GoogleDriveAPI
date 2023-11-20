@@ -39,7 +39,7 @@ class DropboxOAuthUtil(
      * Because mobile apps need to keep Dropbox secrets in their binaries we need to use PKCE.
      * Read more about this here: https://dropbox.tech/developers/pkce--what-and-why-
      **/
-    fun startDropboxAuthorization2PKCE(context: Context) {
+    fun startDropboxAuthorization2PKCE(context: Context): DbxCredential? {
         val requestConfig = DbxRequestConfig(dropboxAppConfig.clientIdentifier)
 
         // The scope's your app will need from Dropbox
@@ -52,6 +52,7 @@ class DropboxOAuthUtil(
         )
         Auth.startOAuth2PKCE(context, dropboxAppConfig.apiKey, requestConfig, scopes)
         isAwaitingResult = true
+        return Auth.getDbxCredential()
     }
 
     /**

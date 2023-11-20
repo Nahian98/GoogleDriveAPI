@@ -1,4 +1,4 @@
-package com.android.googledriveapi
+package com.android.googledriveapi.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

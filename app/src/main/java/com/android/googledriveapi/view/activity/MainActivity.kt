@@ -1,22 +1,29 @@
-package com.android.googledriveapi
+package com.android.googledriveapi.view.activity
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.googledriveapi.databinding.ActivityMainBinding
 import kotlin.concurrent.thread
 import android.Manifest
+import android.content.Intent
+import android.os.CountDownTimer
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.android.googledriveapi.downloadManager.AndroidDownloader
 import com.android.googledriveapi.imports.dropBox.DropBoxServiceHelper
 import com.android.googledriveapi.imports.googleDrive.GoogleDriveServiceHelper
+import com.box.androidsdk.content.BoxApiFile
+import com.box.androidsdk.content.BoxApiFolder
+import com.box.androidsdk.content.BoxConfig
+import com.box.androidsdk.content.BoxConstants
+import com.box.androidsdk.content.BoxException
+import com.box.androidsdk.content.models.BoxSession
 import com.dropbox.core.oauth.DbxCredential
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var googleDriveServiceHelper: GoogleDriveServiceHelper
-    private lateinit var dropBoxServiceHelper: DropBoxServiceHelper
 
     private val requestedPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(
@@ -56,10 +63,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         requestPermissionLaunch.launch(requestedPermissions)
-
-        googleDriveServiceHelper = GoogleDriveServiceHelper(this@MainActivity)
-        dropBoxServiceHelper = DropBoxServiceHelper(this@MainActivity)
-
+        BoxConfig.CLIENT_ID = "lp939j8lwvk03ek3yxhdbbg723z0rpm8"
+        BoxConfig.CLIENT_SECRET = "ZoYY2JeOaTL48PbcXePuqxNNPdA31tOW"
+        BoxConfig.REDIRECT_URL = "https://app.box.com"
         initListener()
     }
 
@@ -74,22 +80,49 @@ class MainActivity : AppCompatActivity() {
 
     private fun initListener() {
         binding.mcGDrive.setOnClickListener {
-            googleDriveServiceHelper.requestGDriveSignIn()
+            startActivity(Intent(this@MainActivity, SongDownloadActivity::class.java).apply {
+                putExtra("singInOption", "googleDrive")
+            })
         }
 
         binding.mcDropBox.setOnClickListener {
-            if (!dropBoxServiceHelper.dropboxCredentialUtil.isAuthenticated()){
-                val authCredential: DbxCredential? = dropBoxServiceHelper.dropboxOAuthUtil.startDropboxAuthorizationOAuth2(this@MainActivity)
-                if (authCredential != null) {
-                    dropBoxServiceHelper.dropboxCredentialUtil.storeCredentialLocally(authCredential)
+            startActivity(Intent(this@MainActivity, SongDownloadActivity::class.java).apply {
+                putExtra("singInOption", "dropbox")
+            })
+        }
+
+        //            dropBoxServiceHelper.dropboxOAuthUtil.startDropboxAuthorization2PKCE(this@MainActivity)
+//            dropBoxServiceHelper.dropboxOAuthUtil.onResume()
+//            dropBoxServiceHelper.dropboxCredentialUtil.readCredentialLocally()
+//            thread {
+//                dropBoxServiceHelper.listFiles()
+//            }
+
+        binding.mcBox.setOnClickListener {
+            val session = BoxSession(this@MainActivity)
+            session.authenticate(this@MainActivity)
+            val boxFolderApi = BoxApiFolder(session)
+            val boxFileApi = BoxApiFile(session)
+
+            object : CountDownTimer(5000,1000){
+                override fun onTick(millisUntilFinished: Long) {
+
                 }
-            } else {
-                Toast.makeText(this@MainActivity, "Already signed in", Toast.LENGTH_SHORT).show()
-                dropBoxServiceHelper.fetchAccountInfo()
-                thread {
-                    dropBoxServiceHelper.listFiles()
+
+                override fun onFinish() {
+                    thread {
+                        try {
+                            val folderItems = boxFolderApi.getItemsRequest(BoxConstants.ROOT_FOLDER_ID).send()
+                            for (boxItem in folderItems){
+                                Log.d("__BoxFolders", "$boxItem")
+                            }
+                        } catch (e: BoxException) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
-            }
+            }.start()
+
         }
 
         binding.btnDownload.setOnClickListener {
@@ -100,6 +133,10 @@ class MainActivity : AppCompatActivity() {
                 downloader.donwloadFile(link)
             }
         }
+    }
+
+    private fun getRootFolder() {
+
     }
 
 }
