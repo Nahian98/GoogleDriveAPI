@@ -2,10 +2,6 @@ package com.android.googledriveapi.view.activity
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import android.provider.Settings.Global.putString
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.googledriveapi.databinding.ActivitySongDownloadBinding
 import com.android.googledriveapi.imports.dropBox.DropBoxServiceHelper
 import com.android.googledriveapi.imports.googleDrive.GoogleDriveServiceHelper
-import com.android.googledriveapi.view.adapter.BoxItemAdapter
 import com.android.googledriveapi.view.adapter.SongsAdapter
 import com.dropbox.core.oauth.DbxCredential
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +16,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.concurrent.thread
 
 class SongDownloadActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySongDownloadBinding
@@ -82,7 +76,8 @@ class SongDownloadActivity : AppCompatActivity() {
                 val credential = dropBoxServiceHelper.dropboxOAuthUtil.startDropboxAuthorization2PKCE(this@SongDownloadActivity)
                 if (credential != null) {
                     sharedPreferences.edit().apply{
-                        putString("credential", DbxCredential.Writer.writeToString(credential))
+                        putString("credential", credential.accessToken)
+                        putString("refresh", credential.refreshToken)
                     }.apply()
                 }
 //                dropBoxServiceHelper.dropboxOAuthUtil.onResume()
@@ -94,7 +89,7 @@ class SongDownloadActivity : AppCompatActivity() {
                 dropBoxServiceHelper.fetchAccountInfo()
 
                 GlobalScope.launch {
-                    dropBoxServiceHelper.listFiles()
+                    dropBoxServiceHelper.listFiles(sharedPreferences.getString("credential", null))
                     delay(5000)
                     withContext(Dispatchers.Main){
                         adapter.setData(dropBoxServiceHelper.fileList)

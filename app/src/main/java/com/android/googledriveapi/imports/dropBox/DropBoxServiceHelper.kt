@@ -10,6 +10,8 @@ import com.android.googledriveapi.imports.dropBox.api.DropboxCredentialUtil
 import com.android.googledriveapi.imports.dropBox.api.DropboxOAuthUtil
 import com.android.googledriveapi.imports.dropBox.api.GetCurrentAccountResult
 import com.android.googledriveapi.model.Songs
+import com.dropbox.core.DbxRequestConfig
+import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
 import kotlinx.coroutines.launch
 
@@ -21,9 +23,16 @@ class DropBoxServiceHelper(private val activity: AppCompatActivity) {
         ?.let { DropboxApiWrapper(it, dropboxAppConfig.clientIdentifier) }
 
     var fileList = mutableListOf<Songs>()
+    val apiKey: String = "qorirrew2pvgo44"
+    val clientIdentifier: String = "db-${apiKey}"
 
-    fun listFiles(){
-        val files: ListFolderResult? = dropboxApiWrapper?.dropboxClient?.files()?.listFolder("")
+
+    fun listFiles(credential: String?) {
+        val dropboxClient: DbxClientV2 = DbxClientV2(
+            DbxRequestConfig(clientIdentifier),
+            credential
+        )
+        val files: ListFolderResult? = dropboxClient.files()?.listFolder("")
         if (files != null) {
             for (file in files.entries){
                 Log.d("_DFiles", "$file")
