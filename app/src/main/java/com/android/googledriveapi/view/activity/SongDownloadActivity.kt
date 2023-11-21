@@ -1,10 +1,13 @@
 package com.android.googledriveapi.view.activity
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings.Global.putString
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.googledriveapi.databinding.ActivitySongDownloadBinding
@@ -12,11 +15,13 @@ import com.android.googledriveapi.imports.dropBox.DropBoxServiceHelper
 import com.android.googledriveapi.imports.googleDrive.GoogleDriveServiceHelper
 import com.android.googledriveapi.view.adapter.BoxItemAdapter
 import com.android.googledriveapi.view.adapter.SongsAdapter
+import com.dropbox.core.oauth.DbxCredential
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.concurrent.thread
 
 class SongDownloadActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySongDownloadBinding
@@ -28,6 +33,7 @@ class SongDownloadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySongDownloadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         getExtra()
         initComponent()
         initListener()
@@ -38,6 +44,10 @@ class SongDownloadActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
+        val sharedPreferences: SharedPreferences = getSharedPreferences(
+            "dropbox-sample2",
+            AppCompatActivity.MODE_PRIVATE
+        )
         adapter = SongsAdapter(this@SongDownloadActivity, arrayListOf())
         binding.rvSongs.adapter = adapter
         val linearLayoutManager = LinearLayoutManager(this@SongDownloadActivity)
@@ -67,16 +77,30 @@ class SongDownloadActivity : AppCompatActivity() {
 //                }
 //            }.start()
         } else if(signInOption == "dropbox") {
-//            if (!dropBoxServiceHelper.dropboxCredentialUtil.isAuthenticated()){
-//                val credential = dropBoxServiceHelper.dropboxOAuthUtil.startDropboxAuthorizationOAuth2(this@SongDownloadActivity)
-////                dropBoxServiceHelper.dropboxOAuthUtil.onResume()
+            val sharedPrefValidity = sharedPreferences.getString("credential", null)
+            if (sharedPrefValidity == null){
+                val credential = dropBoxServiceHelper.dropboxOAuthUtil.startDropboxAuthorization2PKCE(this@SongDownloadActivity)
+                if (credential != null) {
+                    sharedPreferences.edit().apply{
+                        putString("credential", DbxCredential.Writer.writeToString(credential))
+                    }.apply()
+                }
+//                dropBoxServiceHelper.dropboxOAuthUtil.onResume()
 //                if (credential != null) {
 //                    dropBoxServiceHelper.dropboxCredentialUtil.storeCredentialLocally(credential)
 //                }
-//            } else {
-//                Toast.makeText(this@SongDownloadActivity, "Already signed in", Toast.LENGTH_SHORT).show()
-//                dropBoxServiceHelper.fetchAccountInfo()
-//
+            } else {
+                Toast.makeText(this@SongDownloadActivity, "Already signed in", Toast.LENGTH_SHORT).show()
+                dropBoxServiceHelper.fetchAccountInfo()
+
+                GlobalScope.launch {
+                    dropBoxServiceHelper.listFiles()
+                    delay(5000)
+                    withContext(Dispatchers.Main){
+                        adapter.setData(dropBoxServiceHelper.fileList)
+                    }
+                }
+
 //                object : CountDownTimer(5000,1000){
 //                    override fun onTick(millisUntilFinished: Long) {
 //
@@ -90,7 +114,7 @@ class SongDownloadActivity : AppCompatActivity() {
 //
 //                    }
 //                }.start()
-//            }
+            }
         }
     }
 

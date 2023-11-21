@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, SongDownloadActivity::class.java).apply {
                 putExtra("singInOption", "dropbox")
             })
+
         }
 
         //            dropBoxServiceHelper.dropboxOAuthUtil.startDropboxAuthorization2PKCE(this@MainActivity)

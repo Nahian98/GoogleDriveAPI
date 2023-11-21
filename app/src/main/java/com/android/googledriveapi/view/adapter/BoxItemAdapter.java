@@ -39,10 +39,12 @@ public class BoxItemAdapter extends RecyclerView.Adapter<BoxItemAdapter.ItemView
         holder.nameTextView.setText(item.getName());
         holder.modifiedByTextView.setText(item.getModifiedBy());
         if (item instanceof BoxFiles) {
-            holder.imageView.setImageResource(R.drawable.ic_file_64);
-        } else if (item instanceof BoxFolders) {
-            holder.imageView.setImageResource(R.drawable.ic_folder_64);
+            holder.imageView.setImageResource(R.drawable.music_folder_icon);
         }
+//        else if (item instanceof BoxFolders) {
+//            holder.imageView.setImageResource(R.drawable.ic_folder_64);
+//        }
+
     }
 
     @Override

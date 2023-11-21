@@ -3,6 +3,7 @@ package com.android.googledriveapi.view.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -16,6 +17,7 @@ import com.android.googledriveapi.model.BoxFolders;
 import com.android.googledriveapi.model.BoxItems;
 import com.android.googledriveapi.view.adapter.BoxItemAdapter;
 import com.box.sdk.BoxAPIConnection;
+import com.box.sdk.BoxCollection;
 import com.box.sdk.BoxFile;
 import com.box.sdk.BoxFolder;
 import com.box.sdk.BoxItem;
@@ -79,13 +81,18 @@ public class BoxItemsActivity extends AppCompatActivity {
         for (BoxItem.Info itemInfo : boxFolder) {
             if (itemInfo instanceof BoxFile.Info) {
                 BoxFile.Info fileInfo = (BoxFile.Info) itemInfo;
-                BoxFiles file = new BoxFiles(fileInfo.getName(), fileInfo.getModifiedBy().getName());
-                items.add(file);
-            } else if (itemInfo instanceof BoxFolder.Info) {
-                BoxFolder.Info folderInfo = (BoxFolder.Info) itemInfo;
-                BoxFolders folder = new BoxFolders(folderInfo.getName(), folderInfo.getModifiedBy().getName());
-                items.add(folder);
+                Log.d("__BoxFiles", fileInfo.getJson());
+                if (fileInfo.getName().endsWith(".mp3")){
+                    BoxFiles file = new BoxFiles(fileInfo.getName(), fileInfo.getModifiedBy().getName());
+                    items.add(file);
+                }
             }
+//            else if (itemInfo instanceof BoxFolder.Info) {
+//                BoxFolder.Info folderInfo = (BoxFolder.Info) itemInfo;
+//                Log.d("__BoxFolders", folderInfo.getJson());
+//                BoxFolders folder = new BoxFolders(folderInfo.getName(), folderInfo.getModifiedBy().getName());
+//                items.add(folder);
+//            }
         }
         return items;
     }

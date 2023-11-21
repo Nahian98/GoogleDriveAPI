@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.android.googledriveapi.R
 import com.android.googledriveapi.databinding.ItemSongsBinding
 import com.android.googledriveapi.databinding.ListItemBinding
 import com.android.googledriveapi.model.Songs
@@ -28,6 +29,7 @@ class SongsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val song = songs[position]
+        holder.binding.itemImageView.setImageResource(R.drawable.music_folder_icon)
         holder.binding.itemNameTextView.text = song.name
     }
 
