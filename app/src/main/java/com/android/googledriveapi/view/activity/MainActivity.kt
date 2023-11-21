@@ -13,12 +13,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.android.googledriveapi.downloadManager.AndroidDownloader
 import com.android.googledriveapi.imports.dropBox.DropBoxServiceHelper
 import com.android.googledriveapi.imports.googleDrive.GoogleDriveServiceHelper
-import com.box.androidsdk.content.BoxApiFile
-import com.box.androidsdk.content.BoxApiFolder
-import com.box.androidsdk.content.BoxConfig
-import com.box.androidsdk.content.BoxConstants
-import com.box.androidsdk.content.BoxException
-import com.box.androidsdk.content.models.BoxSession
+import com.box.sdk.BoxAPIConnection
+import com.box.sdk.BoxConfig
 import com.dropbox.core.oauth.DbxCredential
 
 
@@ -61,11 +57,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val api = BoxAPIConnection("81bgvgblrktpkrpqja8eogjpp95tbudl", "1n7FjU9cVi9Rruh4ydhza02EU4nokxOL",)
         requestPermissionLaunch.launch(requestedPermissions)
-        BoxConfig.CLIENT_ID = "lp939j8lwvk03ek3yxhdbbg723z0rpm8"
-        BoxConfig.CLIENT_SECRET = "ZoYY2JeOaTL48PbcXePuqxNNPdA31tOW"
-        BoxConfig.REDIRECT_URL = "https://app.box.com"
         initListener()
     }
 
@@ -99,29 +92,31 @@ class MainActivity : AppCompatActivity() {
 //            }
 
         binding.mcBox.setOnClickListener {
-            val session = BoxSession(this@MainActivity)
-            session.authenticate(this@MainActivity)
-            val boxFolderApi = BoxApiFolder(session)
-            val boxFileApi = BoxApiFile(session)
+//            val session = BoxSession(this@MainActivity)
+//            session.authenticate(this@MainActivity)
+//            val boxFolderApi = BoxApiFolder(session)
+//            val boxFileApi = BoxApiFile(session)
+//
+//            object : CountDownTimer(5000,1000){
+//                override fun onTick(millisUntilFinished: Long) {
+//
+//                }
+//
+//                override fun onFinish() {
+//                    thread {
+//                        try {
+//                            val folderItems = boxFolderApi.getItemsRequest(BoxConstants.ROOT_FOLDER_ID).send()
+//                            for (boxItem in folderItems){
+//                                Log.d("__BoxFolders", "$boxItem")
+//                            }
+//                        } catch (e: BoxException) {
+//                            e.printStackTrace()
+//                        }
+//                    }
+//                }
+//            }.start()
 
-            object : CountDownTimer(5000,1000){
-                override fun onTick(millisUntilFinished: Long) {
-
-                }
-
-                override fun onFinish() {
-                    thread {
-                        try {
-                            val folderItems = boxFolderApi.getItemsRequest(BoxConstants.ROOT_FOLDER_ID).send()
-                            for (boxItem in folderItems){
-                                Log.d("__BoxFolders", "$boxItem")
-                            }
-                        } catch (e: BoxException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-            }.start()
+            startActivity(Intent(this@MainActivity, BoxActivity::class.java))
 
         }
 

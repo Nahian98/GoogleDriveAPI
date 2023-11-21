@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.googledriveapi.databinding.ItemSongsBinding
+import com.android.googledriveapi.databinding.ListItemBinding
 import com.android.googledriveapi.model.Songs
 
 class SongsAdapter(
@@ -13,11 +14,11 @@ class SongsAdapter(
     private val songs: MutableList<Songs>
 ) : RecyclerView.Adapter<SongsAdapter.ViewHolder>(){
     var onItemClick: ((Songs) -> Unit)? = null
-    class ViewHolder(val binding: ItemSongsBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemSongsBinding.inflate(inflater)
+        val binding = ListItemBinding.inflate(inflater)
         return ViewHolder(binding)
     }
 
@@ -27,7 +28,7 @@ class SongsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val song = songs[position]
-        holder.binding.tvSongName.text = song.name
+        holder.binding.itemNameTextView.text = song.name
     }
 
     @SuppressLint("NotifyDataSetChanged")

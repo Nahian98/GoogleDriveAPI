@@ -18,7 +18,9 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Collections
 import kotlin.concurrent.thread
@@ -72,9 +74,10 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
                     credential
                 ).setApplicationName(APP_NAME).build()
 
-                thread {
+                GlobalScope.launch {
                     listFiles(googleDriveService)
                 }
+
             }
             .addOnFailureListener {
                 Log.e(TAG, "Unable to sign in.", it)
@@ -87,11 +90,15 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
             val files: MutableList<File> = result.files
             for (file in files) {
                 Log.d("_Files", "$file")
-                fileList.add(
-                    Songs(
-                    name = file.name
+                Log.d("_Mime", file.mimeType)
+                if (file.mimeType == "audio/mpeg"){
+                    fileList.add(
+                        Songs(
+                            name = file.name
+                        )
                     )
-                )
+                }
+
             }
 
         } catch (e: IOException) {

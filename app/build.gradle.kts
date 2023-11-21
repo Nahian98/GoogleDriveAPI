@@ -71,5 +71,6 @@ dependencies {
     implementation("com.dropbox.core:dropbox-core-sdk:5.4.5")
 
     // Box api
-    implementation("com.box:box-android-sdk:4.2.3")
+    implementation("com.box:box-java-sdk:3.8.0")
+    implementation ("androidx.browser:browser:1.7.0")
 }
