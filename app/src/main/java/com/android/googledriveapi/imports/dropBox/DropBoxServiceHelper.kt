@@ -1,5 +1,6 @@
 package com.android.googledriveapi.imports.dropBox
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,8 @@ import com.android.googledriveapi.imports.dropBox.api.DropboxOAuthUtil
 import com.android.googledriveapi.imports.dropBox.api.GetCurrentAccountResult
 import com.android.googledriveapi.model.Songs
 import com.dropbox.core.DbxRequestConfig
+import com.dropbox.core.android.Auth
+import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
 import kotlinx.coroutines.launch
@@ -43,6 +46,11 @@ class DropBoxServiceHelper(private val activity: AppCompatActivity) {
                 )
             }
         }
+    }
+
+    fun startDropboxAuthorizationOAuth2(context: Context): DbxCredential? {
+        Auth.startOAuth2Authentication(context, dropboxAppConfig.apiKey)
+        return Auth.getDbxCredential()
     }
 
     fun fetchAccountInfo() {
