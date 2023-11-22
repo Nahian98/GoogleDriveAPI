@@ -17,6 +17,7 @@ import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class DropBoxServiceHelper(private val activity: AppCompatActivity) {
     val dropboxCredentialUtil: DropboxCredentialUtil = DropboxCredentialUtil(activity.applicationContext)
@@ -30,20 +31,101 @@ class DropBoxServiceHelper(private val activity: AppCompatActivity) {
     val clientIdentifier: String = "db-${apiKey}"
 
 
-    fun listFiles(credential: String?) {
+    fun listAllFilesAndFolders(credential: String?) {
         val dropboxClient: DbxClientV2 = DbxClientV2(
             DbxRequestConfig(clientIdentifier),
             credential
         )
         val files: ListFolderResult? = dropboxClient.files()?.listFolder("")
+
         if (files != null) {
             for (file in files.entries){
+                // Converting metadata to jsonObject
                 Log.d("_DFiles", "$file")
-                fileList.add(
-                    Songs(
-                        name = file.name,
+                val jsonObject = JSONObject(file.toString())
+                val id = jsonObject.getString("path_lower")
+                val tag = jsonObject.getString(".tag")
+                val name = jsonObject.getString("name")
+
+                // Detecting the fileType
+                val fileType = if(tag == "folder"){
+                    "folder"
+                } else {
+                    if (name.endsWith(".mp3")){
+                        "music"
+                    } else {
+                        "others"
+                    }
+                }
+
+                // Adding to the pojo class
+                if (fileType == "folder"){
+                    fileList.add(
+                        Songs(
+                            id = id,
+                            fileType = fileType,
+                            name = name,
+                        )
                     )
-                )
+                } else if (fileType == "music"){
+                    fileList.add(
+                        Songs(
+                            id = id,
+                            fileType = fileType,
+                            name = name,
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun listFilesFromFolders(credential: String?, id: String) {
+        val dropboxClient: DbxClientV2 = DbxClientV2(
+            DbxRequestConfig(clientIdentifier),
+            credential
+        )
+        val files: ListFolderResult? = dropboxClient.files()?.listFolder(id)
+
+        if (files != null) {
+            fileList.clear()
+            for (file in files.entries){
+                // Converting metadata to jsonObject
+                Log.d("_DFiles", "$file")
+                val jsonObject = JSONObject(file.toString())
+                val id = jsonObject.getString("path_lower")
+                val tag = jsonObject.getString(".tag")
+                val name = jsonObject.getString("name")
+
+                // Detecting the fileType
+                val fileType = if(tag == "folder"){
+                    "folder"
+                } else {
+                    if (name.endsWith(".mp3")){
+                        "music"
+                    } else {
+                        "others"
+                    }
+                }
+
+                // Adding to the pojo class
+                if (fileType == "folder"){
+                    fileList.add(
+                        Songs(
+                            id = id,
+                            fileType = fileType,
+                            name = name,
+                        )
+                    )
+                } else if (fileType == "music"){
+                    fileList.add(
+                        Songs(
+                            id = id,
+                            fileType = fileType,
+                            name = name,
+                        )
+                    )
+                }
             }
         }
     }

@@ -1,13 +1,10 @@
 package com.android.googledriveapi.imports.googleDrive
 import android.app.Activity
 import android.content.Intent
-import android.os.CountDownTimer
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.googledriveapi.model.Songs
-import com.android.googledriveapi.view.adapter.SongsAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
@@ -19,7 +16,6 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Collections
@@ -28,7 +24,8 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
 
     private val TAG = "_GoogleDriveHelper"
     private val APP_NAME = "GDriveKanon"
-    var fileList = mutableListOf<Songs>()
+    private lateinit var googleDriveService: Drive
+    val fileList = mutableListOf<Songs>()
 
     private val signInLauncher =
         activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -68,14 +65,14 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
                     Log.d(TAG, "AccessToken: ${credential.token}")
                 }
 
-                val googleDriveService = Drive.Builder(
+                googleDriveService = Drive.Builder(
                     AndroidHttp.newCompatibleTransport(),
                     GsonFactory(),
                     credential
                 ).setApplicationName(APP_NAME).build()
 
                 GlobalScope.launch {
-                    listFiles(googleDriveService)
+                    listAllFilesAndFolders()
                 }
 
             }
@@ -84,20 +81,32 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
             }
     }
 
-    private fun listFiles(googleDriveService: Drive) {
+    fun listAllFilesAndFolders() {
         try {
-            val result: FileList = googleDriveService.files().list().execute()
+            val result: FileList = googleDriveService.files().list()
+                .setQ("mimeType = 'application/vnd.google-apps.folder' or mimeType = 'audio/mpeg'").execute()
+//            val result2: FileList = googleDriveService.files().list()
+//                .setQ("'1rQoPwJqjNrYInjvp6UKVVHQ595bdLKh0' in parents")
+//                .execute()
             val files: MutableList<File> = result.files
             for (file in files) {
                 Log.d("_Files", "$file")
-                Log.d("_Mime", file.mimeType)
-                if (file.mimeType == "audio/mpeg"){
-                    fileList.add(
-                        Songs(
-                            name = file.name
-                        )
-                    )
+
+                // Detecting the filetype [folder or music file]
+                val fileType = if (file.mimeType == "application/vnd.google-apps.folder"){
+                    "folder"
+                } else {
+                    "music"
                 }
+
+                // Adding the folders and music files into the pojo class
+                fileList.add(
+                    Songs(
+                        id = file.id,
+                        fileType = fileType,
+                        name = file.name
+                    )
+                )
 
             }
 
@@ -105,5 +114,33 @@ class GoogleDriveServiceHelper(private val activity: AppCompatActivity) {
             // Handle API request error
             Log.e("_Files", "Error listing files", e)
         }
+    }
+
+    fun listOnlyFilesFromFolders(fileId: String): MutableList<Songs>? {
+        try {
+            val result: FileList = googleDriveService.files().list()
+                .setQ("'$fileId' in parents")
+                .execute()
+
+            val files: MutableList<File> = result.files
+            Log.d("_MusicFilesHelper", "$files")
+            val fileList2 = mutableListOf<Songs>()
+            for (file in files) {
+                if (file.mimeType == "audio/mpeg") {
+                    fileList2.clear()
+                    fileList2.add(
+                        Songs(
+                            id = file.id,
+                            fileType = "music",
+                            name = file.name
+                        )
+                    )
+                }
+            }
+            return fileList2
+        } catch (e : IOException){
+            e.printStackTrace()
+        }
+        return null
     }
 }

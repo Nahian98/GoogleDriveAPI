@@ -72,8 +72,8 @@ public class BoxItemsActivity extends AppCompatActivity {
     }
 
     private List<BoxItems> getFolderItems(String code) {
-        BoxAPIConnection api = new BoxAPIConnection(getString(R.string.client_id),
-                getString(R.string.client_secret), code);
+        BoxAPIConnection api = new BoxAPIConnection(getString(R.string.box_client_id),
+                getString(R.string.box_client_secret), code);
         Iterable<BoxItem.Info> boxFolder = new BoxFolder(api, "0")
                 .getChildren("name", "modified_by");
 
@@ -87,12 +87,12 @@ public class BoxItemsActivity extends AppCompatActivity {
                     items.add(file);
                 }
             }
-//            else if (itemInfo instanceof BoxFolder.Info) {
-//                BoxFolder.Info folderInfo = (BoxFolder.Info) itemInfo;
-//                Log.d("__BoxFolders", folderInfo.getJson());
-//                BoxFolders folder = new BoxFolders(folderInfo.getName(), folderInfo.getModifiedBy().getName());
-//                items.add(folder);
-//            }
+            else if (itemInfo instanceof BoxFolder.Info) {
+                BoxFolder.Info folderInfo = (BoxFolder.Info) itemInfo;
+                Log.d("__BoxFolders", folderInfo.getJson());
+                BoxFolders folder = new BoxFolders(folderInfo.getName(), folderInfo.getModifiedBy().getName());
+                items.add(folder);
+            }
         }
         return items;
     }

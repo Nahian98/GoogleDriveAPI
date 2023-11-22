@@ -42,9 +42,20 @@
             android:name=".view.activity.BoxItemsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.BoxActivity"
+            android:name=".view.activity.SongDownloadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.TracksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.MainActivity"
             android:exported="true"
             android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -54,21 +65,6 @@
                 <data
                     android:host="boxinandroid"
                     android:scheme="oauth" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.activity.SongDownloadActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.TracksActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -101,55 +97,5 @@
             </intent-filter>
         </receiver>
     </application>
-
-<!--    <application-->
-<!--        android:name=".App"-->
-<!--        android:allowBackup="true"-->
-<!--        android:dataExtractionRules="@xml/data_extraction_rules"-->
-<!--        android:fullBackupContent="@xml/backup_rules"-->
-<!--        android:icon="@mipmap/ic_launcher"-->
-<!--        android:label="@string/app_name"-->
-<!--        android:roundIcon="@mipmap/ic_launcher_round"-->
-<!--        android:supportsRtl="true"-->
-<!--        android:theme="@style/Base.Theme.AndroidGuideLine"-->
-<!--        tools:targetApi="31">-->
-<!--        -->
-<!--        <activity-->
-<!--            android:name=".view.activity.SongDownloadActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".view.activity.TracksActivity"-->
-<!--            android:exported="false" />-->
-
-<!--        <activity-->
-<!--            android:name="com.dropbox.core.android.AuthActivity"-->
-<!--            android:configChanges="orientation|keyboard"-->
-<!--            android:exported="true"-->
-<!--            android:launchMode="singleTask">-->
-<!--            <intent-filter>-->
-<!--                <data android:scheme="db-qorirrew2pvgo44" />-->
-
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--            </intent-filter>-->
-
-<!--            &lt;!&ndash; Additional intent-filter required as a workaround for Apps using targetSdk=33 until the fix in the Dropbox app is available to all users. &ndash;&gt;-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-
-<!--        <receiver-->
-<!--            android:name=".downloadManager.DownloadCompletedReceiver"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
-<!--    </application>-->
 
 </manifest>
