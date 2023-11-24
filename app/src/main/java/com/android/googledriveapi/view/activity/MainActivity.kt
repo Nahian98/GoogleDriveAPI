@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,8 @@ import com.android.googledriveapi.R
 import com.android.googledriveapi.databinding.ActivityMainBinding
 import com.android.googledriveapi.downloadManager.AndroidDownloader
 import com.box.sdk.BoxAPIConnection
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.net.URI
 import java.util.UUID
 import kotlin.concurrent.thread
@@ -21,6 +25,9 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var state: String? = null
+    private var boxAccessToken: String = "a"
+    private  var boxRefreshToken: String = "b"
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +39,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initComponent() {
         requestPermissionLaunch.launch(requestedPermissions)
+        sharedPreferences = getSharedPreferences(
+            "boxKeys",
+            AppCompatActivity.MODE_PRIVATE
+        )
     }
 
 
@@ -55,7 +66,16 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.mcBox.setOnClickListener {
-            launchBoxTab()
+            val boxAccessTokenValidity = sharedPreferences.getString("accessToken", null)
+            val boxRefreshTokenValidity = sharedPreferences.getString("refreshToken", null)
+            if (boxAccessTokenValidity == null || boxRefreshTokenValidity == null) {
+                launchBoxTab()
+            } else {
+                startActivity(Intent(this@MainActivity, BoxItemsActivity::class.java).apply {
+                    putExtra("accessToken", boxAccessTokenValidity)
+                    putExtra("refreshToken", boxRefreshTokenValidity)
+                })
+            }
         }
 
         binding.btnDownload.setOnClickListener {
@@ -102,10 +122,34 @@ class MainActivity : AppCompatActivity() {
             }
             val code = callback.getQueryParameter("code")
             if (code != null) {
-                val itemsIntent = Intent(this@MainActivity, SongDownloadActivity::class.java)
-                itemsIntent.putExtra("code", code)
-                itemsIntent.putExtra("singInOption", "box")
-                this@MainActivity.startActivity(itemsIntent)
+                GlobalScope.launch {
+                    val api = BoxAPIConnection(
+                        getString(R.string.box_client_id),
+                        getString(R.string.box_client_secret), code
+                    )
+                    boxAccessToken = api.accessToken
+                    boxRefreshToken = api.refreshToken
+                    Log.d("__MAccessToken", api.accessToken)
+                    Log.d("__MRefreshToken", api.refreshToken)
+                }
+                val itemsIntent = Intent(this@MainActivity, BoxItemsActivity::class.java)
+
+                object : CountDownTimer(2000, 1000){
+                    override fun onTick(millisUntilFinished: Long) {
+
+                    }
+
+                    override fun onFinish() {
+                        sharedPreferences.edit().apply{
+                            putString("accessToken", boxAccessToken)
+                            putString("refreshToken", boxRefreshToken)
+                        }.apply()
+                        itemsIntent.putExtra("accessToken", boxAccessToken.toString())
+                        itemsIntent.putExtra("refreshToken", boxRefreshToken.toString())
+                        this@MainActivity.startActivity(itemsIntent)
+                    }
+                }.start()
+
             } else {
                 Toast.makeText(this@MainActivity, "Authorization code not found in callback.", Toast.LENGTH_LONG).show()
             }

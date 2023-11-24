@@ -92,19 +92,20 @@ class SongDownloadActivity : AppCompatActivity() {
                 }
 
             }
-        } else if (signInOption == "box") {
-            showProgressBar(binding.progressBar, binding.rvSongs)
-            val extras = intent.extras
-            if (extras != null) {
-                val code = extras.getString("code")
-                if (code != null) {
-                    if (code.isNotEmpty()) {
-                        updateUI(code, binding.progressBar, binding.rvSongs)
-                    }
-                }
-                // in case we don't get any code we should display an error
-            }
         }
+//        else if (signInOption == "box") {
+//            showProgressBar(binding.progressBar, binding.rvSongs)
+//            val extras = intent.extras
+//            if (extras != null) {
+//                val code = extras.getString("code")
+//                if (code != null) {
+//                    if (code.isNotEmpty()) {
+//                        updateUI(code, binding.progressBar, binding.rvSongs)
+//                    }
+//                }
+//                // in case we don't get any code we should display an error
+//            }
+//        }
     }
 
     override fun onResume() {

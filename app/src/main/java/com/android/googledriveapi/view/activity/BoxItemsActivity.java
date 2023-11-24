@@ -1,5 +1,6 @@
 package com.android.googledriveapi.view.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BoxItemsActivity extends AppCompatActivity {
+    String refreshToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,8 @@ public class BoxItemsActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String code = extras.getString("code");
+            String code = extras.getString("accessToken");
+            refreshToken = extras.getString("refreshToken");
             if (!code.isEmpty()) {
                 updateUI(code, progressBar, recyclerView);
             }
@@ -72,8 +75,21 @@ public class BoxItemsActivity extends AppCompatActivity {
     }
 
     private List<BoxItems> getFolderItems(String code) {
-        BoxAPIConnection api = new BoxAPIConnection(getString(R.string.box_client_id),
-                getString(R.string.box_client_secret), code);
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                "boxKeys",
+                AppCompatActivity.MODE_PRIVATE
+        );
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        String boxAccessToken = sharedPreferences.getString("accessToken", null);
+        String boxRefreshToken = sharedPreferences.getString("refreshToken", null);
+
+        BoxAPIConnection api = new BoxAPIConnection(getString(R.string.box_client_id), getString(R.string.box_client_secret), boxAccessToken, boxRefreshToken);
+
+        myEdit.putString("accessToken", api.getAccessToken());
+        myEdit.putString("refreshToken", api.getRefreshToken());
+        myEdit.apply();
+        Log.d("__AccessToken", api.getAccessToken());
+
         Iterable<BoxItem.Info> boxFolder = new BoxFolder(api, "0")
                 .getChildren("name", "modified_by");
 
